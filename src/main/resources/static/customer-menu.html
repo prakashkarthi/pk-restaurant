@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traditional Menu</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #fef5e7;
+            color: #5a3e2b;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 3rem;
+            margin: 20px 0;
+            color: #d35400;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            margin-top: 20px;
+            text-align: center;
+            color: #8e44ad;
+        }
+
+        /* Menu Container */
+        #menu-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .menu-item {
+            background-color: #fae5d3;
+            border: 2px solid #d35400;
+            border-radius: 10px;
+            padding: 15px;
+            width: 250px;
+            text-align: center;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .menu-item:hover {
+            transform: scale(1.05);
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .menu-item h3 {
+            color: #e74c3c;
+        }
+
+        .menu-item p {
+            margin: 5px 0;
+            font-size: 1rem;
+            color: #2c3e50;
+        }
+
+        .menu-item button {
+            background-color: #d35400;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .menu-item button:hover {
+            background-color: #e74c3c;
+        }
+
+        /* Cart Section */
+        #order-details {
+            background-color: #fdf2e9;
+            border: 2px solid #d35400;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px auto;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .quantity-btn {
+            background-color: #d35400;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .quantity-btn:hover {
+            background-color: #e74c3c;
+        }
+
+        .cart-total {
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-align: right;
+        }
+
+        /* Order Form */
+        #order-form {
+            text-align: center;
+        }
+
+        #order-form input, #order-form select {
+            padding: 10px;
+            margin: 10px;
+            width: calc(100% - 20px);
+            max-width: 300px;
+            border: 1px solid #d35400;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        #order-form button {
+            background-color: #d35400;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #order-form button:hover {
+            background-color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <h1>Traditional Food Menu</h1>
+	<div id="menu-container" class="menu-container">
+	    <!-- Menu items will be dynamically injected here -->
+	</div>
+
+    <h3>Your Cart</h3>
+    <div id="order-details">
+        <!-- Order details (cart items) will be updated dynamically here -->
+    </div>
+
+    <h3>Place Your Order</h3>
+    <form id="order-form">
+        <input type="text" id="customerName" placeholder="Your Name" required>
+        <input type="text" id="contactNumber" placeholder="Contact Number" required>
+        <select id="deliveryOption" required>
+            <option value="Dine-in">Dine-in</option>
+            <option value="Takeaway">Takeaway</option>
+        </select>
+        <button type="submit">Place Order</button>
+        <button type="button" id="cancel-order">Cancel</button>
+    </form>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const menuContainer = document.getElementById("menu-container");
+            const orderDetails = document.getElementById("order-details");
+            const cart = [];
+			let total = 0;
+
+            // Fetch menu items from backend
+            fetch("http://localhost:8080/customer/menu")
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(item => {
+                        if (item.availability) {
+                            const menuItem = document.createElement("div");
+                            menuItem.classList.add("menu-item");
+                            menuItem.innerHTML = `
+                                <h3>${item.itemName}</h3>
+                                <p>${item.description}</p>
+                                <p>Price: ₹${item.price.toFixed(2)}</p>
+                                <button data-id="${item.id}" data-name="${item.itemName}" data-price="${item.price}">Add to Cart</button>
+                            `;
+                            menuContainer.appendChild(menuItem);
+
+                            menuItem.querySelector("button").addEventListener("click", function () {
+                                const menuItem = {
+                                    id: this.getAttribute("data-id"),
+                                    itemName: this.getAttribute("data-name"),
+                                    price: parseFloat(this.getAttribute("data-price")),
+                                    quantity: 1
+                                };
+                                addToCart(menuItem);
+                            });
+                        }
+                    });
+                });
+
+            function addToCart(menuItem) {
+                const existingItem = cart.find(item => item.id === menuItem.id);
+                if (existingItem) {
+                    existingItem.quantity++;
+                } else {
+                    cart.push(menuItem);
+                }
+                updateOrderDetails();
+            }
+
+            function updateOrderDetails() {
+                orderDetails.innerHTML = "";
+                
+
+                cart.forEach((item, index) => {
+                    total += item.price * item.quantity;
+
+                    const itemElement = document.createElement("div");
+                    itemElement.classList.add("cart-item");
+                    itemElement.innerHTML = `
+                        <span>${item.itemName}</span>
+                        <span>
+                            <button class="quantity-btn" data-index="${index}" data-action="decrease">-</button>
+                            ${item.quantity}
+                            <button class="quantity-btn" data-index="${index}" data-action="increase">+</button>
+                        </span>
+                        <span>₹${(item.price * item.quantity).toFixed(2)}</span>
+                    `;
+
+                    orderDetails.appendChild(itemElement);
+                });
+
+                const totalElement = document.createElement("p");
+                totalElement.classList.add("cart-total");
+                totalElement.textContent = `Total: ₹${total.toFixed(2)}`;
+                orderDetails.appendChild(totalElement);
+
+                document.querySelectorAll(".quantity-btn").forEach(button => {
+                    button.addEventListener("click", function () {
+                        const index = this.getAttribute("data-index");
+                        const action = this.getAttribute("data-action");
+                        adjustQuantity(index, action);
+                    });
+                });
+            }
+
+            function adjustQuantity(index, action) {
+                const item = cart[index];
+                if (action === "increase") {
+                    item.quantity++;
+                } else if (action === "decrease") {
+                    item.quantity--;
+                    if (item.quantity === 0) {
+                        cart.splice(index, 1);
+                    }
+                }
+                updateOrderDetails();
+            }
+
+            document.getElementById("order-form").addEventListener("submit", async function (event) {
+                event.preventDefault();
+				
+				const customerName = document.getElementById("customerName").value;
+				const contactNumber = document.getElementById("contactNumber").value;
+				const deliveryOption = document.getElementById("deliveryOption").value;
+				
+				// Create the order object
+				  const orderRequest = {
+					id : 1,
+				    customerName,
+				    contactNumber,
+				    deliveryOption,
+				    totalAmount : total,
+					items: cart,
+				  };
+				
+				  try {
+				      // Send the POST request to the backend
+				      const response = await fetch("/orders/order", {
+				        method: "POST",
+				        headers: {
+				          "Content-Type": "application/json",
+				        },
+				        body: JSON.stringify(orderRequest), // Convert the orderData object to JSON
+				      });
+
+				      if (response.ok) {
+				        const result = await response.json();
+				        console.log("Order placed successfully:", result);
+				        alert("Order placed successfully!");
+				      } else {
+				        const error = await response.text();
+				        console.error("Failed to place order:", error);
+				        alert(`Failed to place order: ${error}`);
+				      }
+				    } catch (error) {
+				      console.error("Error placing order:", error);
+				      alert("An error occurred while placing the order.");
+				    }
+            });
+
+            document.getElementById("cancel-order").addEventListener("click", function () {
+                cart.length = 0;
+                updateOrderDetails();
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Order Details</h1>
+    </header>
+    <main>
+        <h2>Order Information</h2>
+        <p><strong>Order ID:</strong> <span th:text="${order.id}"></span></p>
+        <p><strong>Customer Name:</strong> <span th:text="${order.customerName}"></span></p>
+        <p><strong>Contact Number:</strong> <span th:text="${order.contactNumber}"></span></p>
+        <p><strong>Status:</strong> <span th:text="${order.statuses}"></span></p>
+        <h3>Items:</h3>
+        <ul>
+            <li th:each="detail : ${order.orderDetails}">
+                <span th:text="${detail.menu.itemName}"></span> - 
+                Quantity: <span th:text="${detail.quantity}"></span>
+            </li>
+        </ul>
+    </main>
+    <footer>
+        <a href="/chef/orders">Back to Orders List</a>
+    </footer>
+</body>
+</html>

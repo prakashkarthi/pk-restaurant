@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Order Confirmation</h1>
+    <div id="order-summary">
+        <!-- Order details will be injected here dynamically -->
+    </div>
+
+    <h3>Delivery Information</h3>
+    <form id="order-form">
+        <input type="text" id="customerName" placeholder="Your Name" required>
+        <input type="text" id="contactNumber" placeholder="Contact Number" required>
+        <select id="deliveryOption" required>
+            <option value="Dine-in">Dine-in</option>
+            <option value="Takeaway">Takeaway</option>
+        </select>
+
+        <div id="order-details"></div>
+        
+        <button type="submit">Place Order</button>
+        <button type="button" id="cancel-order">Cancel Order</button>
+    </form>
+
+    <script src="script.js"></script>
+</body>
+</html>
