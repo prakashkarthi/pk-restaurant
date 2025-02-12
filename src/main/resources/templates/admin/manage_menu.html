@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Manage Menu</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <h1>Menu Management</h1>
+    <a href="/admin/menu/add">Add New Menu Item</a>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Available</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="menu : ${menuItems}">
+                <td th:text="${menu.id}"></td>
+                <td th:text="${menu.name}"></td>
+                <td th:text="${menu.price}"></td>
+                <td th:text="${menu.availability ? 'Yes' : 'No'}"></td>
+                <td>
+                    <a th:href="@{/admin/menu/edit/{id}(id=${menu.id})}">Edit</a> |
+                    <a th:href="@{/admin/menu/delete/{id}(id=${menu.id})}">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

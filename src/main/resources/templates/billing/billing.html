@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing Summary</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Billing Summary</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Item Name</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="item : ${orderDetails}">
+                    <td th:text="${item.name}"></td>
+                    <td th:text="${item.quantity}"></td>
+                    <td th:text="${item.price}"></td>
+                    <td th:text="${item.total}"></td>
+                </tr>
+            </tbody>
+        </table>
+        <h3>Total: $<span th:text="${total}"></span></h3>
+        <button>Pay Now</button>
+    </div>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Menu Item</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Menu Item</h1>
+        <form action="/admin/menu/edit" method="post">
+            <input type="hidden" name="id" th:value="${menu.id}">
+
+            <label for="name">Item Name:</label>
+            <input type="text" id="name" name="name" th:value="${menu.name}" required>
+
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required th:text="${menu.description}"></textarea>
+
+            <label for="price">Price:</label>
+            <input type="number" id="price" name="price" th:value="${menu.price}" required>
+
+            <label for="category">Category:</label>
+            <select id="category" name="category">
+                <option value="Appetizer" th:selected="${menu.category == 'Appetizer'}">Appetizer</option>
+                <option value="Main Course" th:selected="${menu.category == 'Main Course'}">Main Course</option>
+                <option value="Dessert" th:selected="${menu.category == 'Dessert'}">Dessert</option>
+                <option value="Beverage" th:selected="${menu.category == 'Beverage'}">Beverage</option>
+            </select>
+
+            <button type="submit">Update Item</button>
+        </form>
+    </div>
+</body>
+</html>
