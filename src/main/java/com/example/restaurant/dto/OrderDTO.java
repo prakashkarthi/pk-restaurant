@@ -2,21 +2,15 @@ package com.example.restaurant.dto;
 
 import java.util.List;
 
-import jakarta.persistence.OrderBy;
-
 public class OrderDTO {
-
     private Long id;
     private String customerName;
     private String contactNumber;
     private String deliveryOption;
     private Double totalAmount;
-    private String status = "PENDING";
-	private List<OrderItemDTO> items;
+    private List<OrderItemDTO> items;
 
-	
-	
-    // Getters and setters
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -24,10 +18,6 @@ public class OrderDTO {
     public void setId(Long id) {
         this.id = id;
     }
-    
-    public void setStatus(String status) {
-		this.status = status;
-	}
 
     public String getCustomerName() {
         return customerName;
@@ -69,10 +59,10 @@ public class OrderDTO {
         this.items = items;
     }
 
-    // Nested DTO class for order items
+    // Inner DTO Class for Order Items
     public static class OrderItemDTO {
         private Long menuId;
-        private int quantity;
+        private Integer quantity;
 
         public Long getMenuId() {
             return menuId;
@@ -82,22 +72,12 @@ public class OrderDTO {
             this.menuId = menuId;
         }
 
-        public int getQuantity() {
+        public Integer getQuantity() {
             return quantity;
         }
 
-        public void setQuantity(int quantity) {
+        public void setQuantity(Integer quantity) {
             this.quantity = quantity;
         }
     }
-
-	public OrderBy[] getOrderDetails() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String getStatus() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

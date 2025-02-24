@@ -3,25 +3,55 @@ package com.example.restaurant.entity;
 import jakarta.persistence.*;
 import java.util.List;
 
-@Entity
-@Table(name = "orders")
+@Entity  // This should only be in the entity package
+@Table(name = "orders")  // Ensures the table name is distinct
 public class Order {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String customerName;
-
     private String contactNumber;
-
     private String deliveryOption;
+    private String status;
+    private double totalAmount;
 
-    private Double totalAmount;
-    @Column(name = "status")
-    private String status = "PENDING";
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<OrderDetails> orderDetails;
 
-    public String getStatus() {
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getCustomerName() {
+		return customerName;
+	}
+
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
+
+	public String getContactNumber() {
+		return contactNumber;
+	}
+
+	public void setContactNumber(String contactNumber) {
+		this.contactNumber = contactNumber;
+	}
+
+	public String getDeliveryOption() {
+		return deliveryOption;
+	}
+
+	public void setDeliveryOption(String deliveryOption) {
+		this.deliveryOption = deliveryOption;
+	}
+
+	public String getStatus() {
 		return status;
 	}
 
@@ -29,57 +59,21 @@ public class Order {
 		this.status = status;
 	}
 
-	// Ensure cascading for order details
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL,  orphanRemoval = true)
-    private List<OrderDetails> orderDetails; // Add this field
+	public double getTotalAmount() {
+		return totalAmount;
+	}
+
+	public void setTotalAmount(double totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+
+	public List<OrderDetails> getOrderDetails() {
+		return orderDetails;
+	}
+
+	public void setOrderDetails(List<OrderDetails> orderDetails) {
+		this.orderDetails = orderDetails;
+	}
 
     // Getters and Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getCustomerName() {
-        return customerName;
-    }
-
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
-
-    public String getContactNumber() {
-        return contactNumber;
-    }
-
-    public void setContactNumber(String contactNumber) {
-        this.contactNumber = contactNumber;
-    }
-
-    public String getDeliveryOption() {
-        return deliveryOption;
-    }
-
-    public void setDeliveryOption(String deliveryOption) {
-        this.deliveryOption = deliveryOption;
-    }
-
-    public Double getTotalAmount() {
-        return totalAmount;
-    }
-
-    public void setTotalAmount(Double totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-
-    public List<OrderDetails> getOrderDetails() {
-        return orderDetails;
-    }
-
-    public void setOrderDetails(List<OrderDetails> orderDetails) {
-        this.orderDetails = orderDetails;
-    }
-
-   }
+}

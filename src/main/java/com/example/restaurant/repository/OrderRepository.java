@@ -12,7 +12,8 @@ import com.example.restaurant.entity.Order;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
 	     
-    List<Order> findByStatusIn(List<String> statuses);
+	List<Order> findByStatusIn(List<String> statuses);
+
 	
 
 }

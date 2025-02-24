@@ -14,27 +14,29 @@ import java.util.List;
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
-
     @Autowired
     private OrderService orderService;
 
-    // Endpoint to get all orders
-    @GetMapping
-    public ResponseEntity<List<Order>> getAllOrders() {
-        List<Order> orders = orderService.getAllOrders();
-        return ResponseEntity.ok(orders);
-    }
-
-    // Endpoint to create a new order
-    @PostMapping("/order")
-    public OrderDTO placeOrder(@RequestBody OrderDTO orderRequest) {
-    	System.out.println("post controller called");
-        // Save the order and return the order details
-        return orderService.createOrder(orderRequest);
-    }
-
+//    @PostMapping("/placeOrder")
+//    public ResponseEntity<?> placeOrder(@RequestBody Order order) {
+//        if (order == null || order.getCustomerName() == null) {
+//            return ResponseEntity.badRequest().body("Invalid order details");
+//        }
+//
+//        Order newOrder = orderService.createOrder(order);
+//        return ResponseEntity.ok(newOrder);
+//    }
     
-    // Endpoint to get an order by its ID
+    @PostMapping("/order")
+    public ResponseEntity<?> placeOrder(@RequestBody Order order) {
+        if (order == null || order.getCustomerName() == null) {
+            return ResponseEntity.badRequest().body("Invalid order details");
+        }
+
+        Order newOrder = orderService.createOrder(order);
+        return ResponseEntity.ok(newOrder);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<OrderDTO> getOrderById(@PathVariable Long id) {
         try {
@@ -45,7 +47,6 @@ public class OrderController {
         }
     }
 
-    // Endpoint to update an existing order
     @PutMapping("/{id}")
     public ResponseEntity<OrderDTO> updateOrder(@PathVariable Long id, @RequestBody OrderDTO orderDTO) {
         try {
@@ -56,7 +57,6 @@ public class OrderController {
         }
     }
 
-    // Endpoint to delete an order
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
         try {

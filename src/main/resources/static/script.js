@@ -1,43 +1,4 @@
-<script>
-    document.getElementById("order-form").addEventListener("submit", function (event) {
-    event.preventDefault();
 
-    const customerName = document.getElementById("customerName").value;
-    const contactNumber = document.getElementById("contactNumber").value;
-    const deliveryOption = document.getElementById("deliveryOption").value;
-
-    // Create the order object
-    const order = {
-        customerName: customerName,
-        contactNumber: contactNumber,
-        deliveryOption: deliveryOption,
-        orderDetails: cart.map(item => ({
-            menuId: item.id,
-            quantity: item.quantity
-        }))
-    };
-
-    // Send the order to the backend
-    fetch("http://localhost:8080/api/orders", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(order)
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert("Order placed successfully!");
-        cart.length = 0; // Clear cart after placing order
-        updateOrderDetails();
-    })
-    .catch(error => {
-        console.error("Error placing order:", error);
-        alert("There was an error placing the order.");
-    });
-});
-
-</script>
  .catch(error => console.error("Error fetching menu:", error));
 
     // Add menu item to the cart

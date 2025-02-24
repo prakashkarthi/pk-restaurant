@@ -4,6 +4,7 @@ import com.example.restaurant.entity.Order;
 import com.example.restaurant.service.ChefService;
 import com.example.restaurant.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -30,28 +31,50 @@ public class ChefController {
     }
 
     // View all orders that are in "Pending" or "In Progress" status
-    @GetMapping("/orders")
+    @GetMapping("/orderss")
     public String viewOrders(Model model) {
         // Define the statuses you want to filter
         List<String> statuses = List.of("PENDING", "IN_PROGRESS");
         // Fetch the orders with the specified statuses
         List<Order> orders = orderService.getOrdersByStatus(statuses);
         // Add orders to the model to pass them to the view
+    	
+    	//List<Order> orders = orderService.getAllOrders();
+    	
         model.addAttribute("orders", orders);
+        
+   
+        
         return "chef/orders"; // Refers to the Thymeleaf template for displaying orders
     }
+    
+    @GetMapping("/orders")
+    public ResponseEntity<List<Order>> getAllOrders() {
+        List<Order> orders = orderService.getAllOrders(); // or however you're fetching orders
+        return ResponseEntity.ok(orders);
+    }
+    
+    @GetMapping("/orders/page")
+    public String getOrdersPage(Model model) {
+        List<Order> orders = orderService.getAllOrders();
+        
+        
+        model.addAttribute("orders", orders);
+        return "chef/orders";
+    }
+    
 
 
-    // View details of a specific order
+
     @GetMapping("/order/{orderId}")
     public String viewOrderDetails(@PathVariable("orderId") Long orderId, Model model) {
         Order order = orderService.getOrderById(orderId);
-        if (order != null) {
-            model.addAttribute("order", order);
-            return "chef/orderDetails"; // Ensure chef/orderDetails.html exists
+        if (order == null) {
+            model.addAttribute("error", "Order not found!");
+            return "redirect:/chef/orders";
         }
-        model.addAttribute("error", "Order not found!");
-        return "chef/orders"; // Redirect or show error on orders page
+        model.addAttribute("order", order);
+        return "chef/orderDetails"; 
     }
 
     // Update the status of an order
